@@ -72,9 +72,16 @@ function getCurrentUser() {
 }
 
 function setCurrentUser(user) {
+  // Save globally for chat.js
+  window.currentUser = user;
+
+  // Save in localStorage for persistence
   localStorage.setItem('ms_user_v5', JSON.stringify(user));
+
+  // Update UI elements (like user name in navbar)
   updateUserUI();
 }
+
 
 function clearUser() {
   localStorage.removeItem('ms_user_v5');
@@ -1141,92 +1148,143 @@ loadResources(); // fetch data on page load
     });
   }
 
-  function renderForum() {
-    root.innerHTML = `
-      <section>
-        <h2>Forum & Chat Communautaire</h2>
-        <p style="color: var(--muted); margin-bottom: 24px;">Échangez avec la communauté MasterSeeem</p>
+function renderForum() {
+  root.innerHTML = `
+    <section>
+      <h2>Forum & Chat Communautaire</h2>
+      <p style="color: var(--muted); margin-bottom: 24px;">Échangez avec la communauté MasterSeeem</p>
 
-        <div class="faq-grid">
-          <div>
-            <div class="qa">
-              <div style="display: flex; align-items: flex-start; gap: 12px;">
-                <div class="avatar">Y</div>
-                <div style="flex: 1;">
-                  <div style="font-weight: 700; margin-bottom: 4px;">Comment publier une ressource ?</div>
-                  <div class="meta">Cliquez sur "Publier", remplissez le formulaire avec les détails de votre ressource.</div>
-                </div>
-              </div>
-            </div>
-
-            <div class="qa">
-              <div style="display: flex; align-items: flex-start; gap: 12px;">
-                <div class="avatar">T</div>
-                <div style="flex: 1;">
-                  <div style="font-weight: 700; margin-bottom: 4px;">Dates importantes pour le PFE</div>
-                  <div class="meta">Les dépôts des sujets PFE sont prévus pour mi-mars. Restez à l'écoute!</div>
-                </div>
-              </div>
-            </div>
-
-            <div class="qa">
-              <div style="display: flex; align-items: flex-start; gap: 12px;">
-                <div class="avatar">G</div>
-                <div style="flex: 1;">
-                  <div style="font-weight: 700; margin-bottom: 4px;">Révision pour les examens</div>
-                  <div class="meta">Des sessions de révision groupée seront organisées la semaine prochaine.</div>
-                </div>
-              </div>
-            </div>
-
-            <div style="margin-top: 32px;">
-              <h3>Chat en Direct</h3>
-              <div class="chat-container">
-                <div class="chat-messages" id="chat-messages">
-                  <div style="text-align: center; color: var(--muted); padding: 20px;">
-                    <div style="font-size: 48px; margin-bottom: 16px;">💬</div>
-                    <div>Chat communautaire - Connectez-vous pour discuter</div>
-                  </div>
-                </div>
-                <div class="chat-input">
-                  <input type="text" placeholder="Tapez votre message..." style="flex: 1;" />
-                  <button class="btn btn-primary">
-                    <i class="fas fa-paper-plane"></i>
-                  </button>
-                </div>
+      <div class="faq-grid">
+        <div>
+          <div class="qa">
+            <div style="display: flex; align-items: flex-start; gap: 12px;">
+              <div class="avatar">Y</div>
+              <div style="flex: 1;">
+                <div style="font-weight: 700; margin-bottom: 4px;">Comment publier une ressource ?</div>
+                <div class="meta">Cliquez sur "Publier", remplissez le formulaire avec les détails de votre ressource.</div>
               </div>
             </div>
           </div>
 
-          <div class="card">
-            <h4><i class="fas fa-question-circle"></i> Poser une question</h4>
-            <form class="ask-form" id="ask-form" style="margin-top: 16px;">
-              <input name="subject" placeholder="Sujet de votre question" class="input" required />
-              <textarea name="body" placeholder="Décrivez votre question en détail..." required style="margin-top: 12px;"></textarea>
-              <div style="display: flex; justify-content: flex-end; margin-top: 16px;">
-                <button type="submit" class="btn btn-primary">
-                  <i class="fas fa-paper-plane"></i> Envoyer la question
-                </button>
+          <div class="qa">
+            <div style="display: flex; align-items: flex-start; gap: 12px;">
+              <div class="avatar">T</div>
+              <div style="flex: 1;">
+                <div style="font-weight: 700; margin-bottom: 4px;">Dates importantes pour le PFE</div>
+                <div class="meta">Les dépôts des sujets PFE sont prévus pour mi-mars. Restez à l'écoute!</div>
               </div>
-            </form>
-            <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid rgba(0,0,0,0.1);">
-              <div style="font-size: 14px; color: var(--muted);">
-                <i class="fas fa-envelope"></i> Contact : 
-                <a href="mailto:${CONFIG.CONTACT_EMAIL}" style="color: var(--primary);">${CONFIG.CONTACT_EMAIL}</a>
+            </div>
+          </div>
+
+          <div class="qa">
+            <div style="display: flex; align-items: flex-start; gap: 12px;">
+              <div class="avatar">G</div>
+              <div style="flex: 1;">
+                <div style="font-weight: 700; margin-bottom: 4px;">Révision pour les examens</div>
+                <div class="meta">Des sessions de révision groupée seront organisées la semaine prochaine.</div>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-top: 32px;">
+            <h3>Chat en Direct</h3>
+            <div class="chat-container">
+              <div class="chat-messages" id="chat-messages">
+                <div style="text-align: center; color: var(--muted); padding: 20px;">
+                  <div style="font-size: 48px; margin-bottom: 16px;">💬</div>
+                  <div>Chat communautaire - Connectez-vous pour discuter</div>
+                </div>
+              </div>
+              <div class="chat-input">
+                <input id="chat-input" type="text" placeholder="Tapez votre message..." style="flex: 1;" />
+                <button id="chat-send" class="btn btn-primary">
+                  <i class="fas fa-paper-plane"></i>
+                </button>
               </div>
             </div>
           </div>
         </div>
-      </section>
-    `;
 
-    document.getElementById('ask-form').addEventListener('submit', (e) => {
-      e.preventDefault();
-      showNotification('Question envoyée ! Nous vous répondrons dans les plus brefs délais.', 'success');
-      e.target.reset();
+        <div class="card">
+          <h4><i class="fas fa-question-circle"></i> Poser une question</h4>
+          <form class="ask-form" id="ask-form" style="margin-top: 16px;">
+            <input name="subject" placeholder="Sujet de votre question" class="input" required />
+            <textarea name="body" placeholder="Décrivez votre question en détail..." required style="margin-top: 12px;"></textarea>
+            <div style="display: flex; justify-content: flex-end; margin-top: 16px;">
+              <button type="submit" class="btn btn-primary">
+                <i class="fas fa-paper-plane"></i> Envoyer la question
+              </button>
+            </div>
+          </form>
+          <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid rgba(0,0,0,0.1);">
+            <div style="font-size: 14px; color: var(--muted);">
+              <i class="fas fa-envelope"></i> Contact : 
+              <a href="mailto:${CONFIG.CONTACT_EMAIL}" style="color: var(--primary);">${CONFIG.CONTACT_EMAIL}</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  `;
+
+  // --- Ask form ---
+  document.getElementById('ask-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    showNotification('Question envoyée ! Nous vous répondrons dans les plus brefs délais.', 'success');
+    e.target.reset();
+  });
+
+  // --- Chat logic ---
+  function initForumChat() {
+    const socket = io('http://localhost:4000'); // chat server
+
+    const input = document.getElementById('chat-input');
+    const sendBtn = document.getElementById('chat-send');
+    const messages = document.getElementById('chat-messages');
+
+    let currentUser = {};
+    try { currentUser = JSON.parse(localStorage.getItem('ms_user_v5')) || {}; } catch(e){}
+
+    const getUserName = () => currentUser.firstName || 'Moi';
+
+    function appendMessage(name, text, isOwn=false) {
+      if (!text) return;
+      const div = document.createElement('div');
+      div.style.marginBottom = '8px';
+      div.innerHTML = `<strong>${name}:</strong> ${text}`;
+      if (isOwn) div.style.fontWeight = '700';
+      messages.appendChild(div);
+      messages.scrollTop = messages.scrollHeight;
+    }
+
+    function sendMessage() {
+      const text = input.value.trim();
+      if (!text) return;
+
+      const msgData = { name: getUserName(), text };
+      appendMessage(msgData.name, msgData.text, true); // show locally
+      socket.emit('chat message', msgData); // send to server
+      input.value = '';
+    }
+
+    sendBtn.addEventListener('click', sendMessage);
+    input.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') sendMessage();
+    });
+
+    socket.on('chat message', (msgData) => {
+      // skip own messages
+      if (!msgData || msgData.name === getUserName()) return;
+      appendMessage(msgData.name || 'Autre', msgData.text);
     });
   }
 
+  // initialize chat
+  initForumChat();
+}
+
+
+  
   /* ====== Helper Functions ====== */
   function resourceCardHtml(resource) {
     const typeInfo = CONFIG.RESOURCE_TYPES[resource.type];
