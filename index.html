@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>MasterSeeem — Plateforme SEEEM (TIM)</title>
+  
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="Plateforme collaborative du Master SEEEM - TIM : ressources, cours, TD, TP et accompagnement">
+  <meta name="keywords" content="SEEEM, TIM, Master, électronique, médical, embarqué, Tunisie">
+  <meta name="author" content="MasterSeeem">
+  
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="app" class="app">
+    <!-- NAVBAR (visible après connexion) -->
+    <header class="navbar" id="main-navbar" style="display:none">
+      <div class="container nav-inner">
+        <div class="brand" id="nav-home" role="button" tabindex="0">
+          <img src="assets/logo.png" alt="Logo MasterSeeem" class="logo-img" />
+          <div class="brand-text">
+            <div class="title">MasterSeeem</div>
+            <div class="subtitle">Master SEEEM — Parcours TIM</div>
+          </div>
+        </div>
+
+        <nav class="nav-links" aria-label="Navigation principale">
+          <a class="nav-link" data-route="home">Accueil</a>
+          <a class="nav-link" data-route="resources">Ressources</a>
+          <a class="nav-link" data-route="forum">Forum/Chat</a>
+          <div class="user-section" id="user-section">
+            <span id="user-name" class="user-name"></span>
+            <button class="btn btn-ghost" id="btn-logout-nav">Déconnexion</button>
+          </div>
+          <button id="dark-toggle" class="icon-btn" title="Mode sombre">🌙</button>
+        </nav>
+      </div>
+    </header>
+
+    <!-- VIEW -->
+    <main class="container main" id="view-root">
+      <!-- contenu injecté par app.js -->
+    </main>
+
+    <!-- FOOTER (visible après connexion) -->
+    <footer class="footer" id="main-footer" style="display:none">
+      <div class="container footer-inner">
+        <div>
+          <p>© <span id="yr"></span> MasterSeeem — Plateforme officielle Master SEEEM TIM</p>
+          <p style="margin-top: 8px; font-size: 14px; color: #94a3b8;">
+            Contact : <a href="mailto:seeem2025@gmail.com" style="color: #cbd5e1;">seeem2025@gmail.com</a>
+          </p>
+        </div>
+        <div class="socials">
+          <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+          <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
+          <a href="#" class="social-link"><i class="fab fa-github"></i></a>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Modal root -->
+  <div id="modal-root"></div>
+
+  <!-- Script -->
+  <script src="app.js"></script>
+</body>
+</html>
